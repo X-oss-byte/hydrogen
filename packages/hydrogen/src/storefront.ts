@@ -229,7 +229,6 @@ const defaultI18n: I18nBase = {language: 'EN', country: 'US'};
 export function createStorefrontClient<TI18n extends I18nBase>(
   options: CreateStorefrontClientOptions<TI18n>,
 ): StorefrontClient<TI18n> {
-  const startTime = new Date().getTime();
   const {
     log,
     storefrontHeaders,
@@ -297,6 +296,7 @@ export function createStorefrontClient<TI18n extends I18nBase>(
     headers = [],
     storefrontApiVersion,
   }: StorefrontQueryOptions | StorefrontMutationOptions): Promise<T> {
+    const startTime = new Date().getTime();
     const userHeaders =
       headers instanceof Headers
         ? Object.fromEntries(headers.entries())
