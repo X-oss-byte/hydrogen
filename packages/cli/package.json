@@ -40,8 +40,7 @@
     "gunzip-maybe": "^1.4.2",
     "prettier": "^2.8.4",
     "tar-fs": "^2.1.1",
-    "typescript": "^5.2.2",
-    "terminal-link": "^3.0.0"
+    "typescript": "^5.2.2"
   },
   "peerDependencies": {
     "@remix-run/dev": "1.19.1",
