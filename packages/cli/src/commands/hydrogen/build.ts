@@ -45,6 +45,10 @@ export default class Build extends Command {
       env: 'SHOPIFY_HYDROGEN_FLAG_SOURCEMAP',
       default: false,
     }),
+    ['bundle-analysis']: Flags.boolean({
+      description: 'Show an analysis of the worker bundle size.',
+      default: false,
+    }),
     'disable-route-warning': Flags.boolean({
       description: 'Disable warning about missing standard routes.',
       env: 'SHOPIFY_HYDROGEN_FLAG_DISABLE_ROUTE_WARNING',
@@ -80,12 +84,14 @@ export async function runBuild({
   codegenConfigPath,
   sourcemap = false,
   disableRouteWarning = false,
+  bundleAnalysis = false,
 }: {
   directory?: string;
   useCodegen?: boolean;
   codegenConfigPath?: string;
   sourcemap?: boolean;
   disableRouteWarning?: boolean;
+  bundleAnalysis?: boolean;
 }) {
   if (!process.env.NODE_ENV) {
     process.env.NODE_ENV = 'production';
@@ -141,10 +147,22 @@ export async function runBuild({
       )}  ${outputToken.link(
         colors.yellow(sizeMB.toFixed(2) + ' MB'),
         bundleAnalysisPath,
-      )}`,
+      )}\n`,
     );
 
-    outputInfo((await getBundleAnalysisSummary(buildPathWorkerFile)) || '\n');
+    if (bundleAnalysis) {
+      outputInfo(
+        outputContent`${
+          (await getBundleAnalysisSummary(
+            buildPathWorkerFile,
+            bundleAnalysisPath,
+          )) || '\n'
+        }\n    │\n    └─── ${outputToken.link(
+          'Complete analysis: ' + bundleAnalysisPath,
+          bundleAnalysisPath,
+        )}\n\n`,
+      );
+    }
 
     if (sizeMB >= 1) {
       outputWarn(
