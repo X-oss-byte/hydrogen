@@ -25,7 +25,7 @@
         "bundle-stats": {
           "name": "bundle-stats",
           "type": "boolean",
-          "description": "Hide the bundle size analysis.",
+          "description": "Show a bundle size summary after building.",
           "allowNo": true
         },
         "disable-route-warning": {
