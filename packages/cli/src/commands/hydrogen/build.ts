@@ -45,9 +45,10 @@ export default class Build extends Command {
       env: 'SHOPIFY_HYDROGEN_FLAG_SOURCEMAP',
       default: false,
     }),
-    ['hide-bundle-stats']: Flags.boolean({
-      description: 'Hide the bundle size analysis.',
-      default: false,
+    ['bundle-stats']: Flags.boolean({
+      description: 'Show a bundle size summary after building.',
+      default: true,
+      allowNo: true,
     }),
     'disable-route-warning': Flags.boolean({
       description: 'Disable warning about missing standard routes.',
@@ -84,14 +85,14 @@ export async function runBuild({
   codegenConfigPath,
   sourcemap = false,
   disableRouteWarning = false,
-  hideBundleStats = false,
+  bundleStats = true,
 }: {
   directory?: string;
   useCodegen?: boolean;
   codegenConfigPath?: string;
   sourcemap?: boolean;
   disableRouteWarning?: boolean;
-  hideBundleStats?: boolean;
+  bundleStats?: boolean;
 }) {
   if (!process.env.NODE_ENV) {
     process.env.NODE_ENV = 'production';
@@ -150,7 +151,7 @@ export async function runBuild({
       )}\n`,
     );
 
-    if (!hideBundleStats) {
+    if (bundleStats) {
       outputInfo(
         outputContent`${
           (await getBundleAnalysisSummary(buildPathWorkerFile)) || '\n'
